@@ -1,8 +1,5 @@
 package main
 
-import (
-
-"fmt")
 
 /*
 Приложение должно запускаться из командной строки, принимать действия и вводимые пользователем данные в качестве аргументов и сохранять задачи в JSON-файле. Пользователь должен иметь возможность:
@@ -23,16 +20,18 @@ import (
 
 func main(){
 	todos := Tasks{}
-	todos.add("Купить пиво")
-	todos.add("НЕ забросить тасктрекер")
-	todos.add("ПОпасть в авитоТЕх")
-	todos.add("Научиться летать")
-	fmt.Printf("%+v\n\n", todos)
+	todos.add("\nКупить пиво")
+	todos.add("\nНЕ забросить тасктрекер")
+	todos.add("\nПОпасть в авитоТЕх")
+	todos.add("\nНаучиться летать")
 	todos.delete(3)
 	//todos.delete(1)
 	//todos.delete(1)
 	todos.UpdateTask(0,"Бросить ПИть")
-
-	fmt.Printf("%+v\n\n", todos)
+	todos.TaskComplate(2)
+	//todos.TaskList()
+	//todos.CompletedTaskList()
+	//todos.NotCompletedTaskList()
+	todos.Print()
 
 }
