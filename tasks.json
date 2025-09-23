@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "title": "Бросить ПИть",
+        "status": "",
+        "createdAT": "0001-01-01T00:00:00Z",
+        "completeAT": null
+    },
+    {
+        "id": 2,
+        "title": "НЕ забросить тасктрекер",
+        "status": "",
+        "createdAT": "0001-01-01T00:00:00Z",
+        "completeAT": null
+    },
+    {
+        "id": 3,
+        "title": "ПОпасть в авитоТЕх",
+        "status": "",
+        "createdAT": "0001-01-01T00:00:00Z",
+        "completeAT": null
+    },
+    {
+        "id": 1,
+        "title": "Debugging",
+        "status": "todo",
+        "createdAT": "2025-09-23T11:35:42.19214532+03:00",
+        "completeAT": null
+    },
+    {
+        "id": 1,
+        "title": "New update my ClI",
+        "status": "todo",
+        "createdAT": "2025-09-23T11:37:05.537159353+03:00",
+        "completeAT": null
+    }
+]

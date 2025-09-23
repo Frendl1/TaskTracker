@@ -6,44 +6,53 @@ import (
 	"os"
 	"strconv"
 	"time"
-
 	"github.com/aquasecurity/table"
 )
 
 
 type Task struct{
-	Title string
-	Id int
-	Completed bool
-	CreateAT time.Time
-	ComplateAT *time.Time
+	Id int		 `json:"id"`
+	Title string `json:"title"`
+	Status string `json:"status"` //todo, in-progress, done 
+	CreateAT time.Time `json:"createdAT"`
+//	UpdateAT time.Time `json:"updateAT"`
+	CompleteAT *time.Time `json:"completeAT"`
 }
 
+
 var id int = 0
-
-type Tasks []Task
-
-
+type storage Storage
+/*
+func AddTask(desc string)                {}
+func UpdateTask(id int, desc string)     {}
+func DeleteTask(id int)                  {}
+func MarkTask(id int, status string)     {}
+func ListTasks()                         {}
+func ListTasksByStatus(status string)    {}
+*/
 
 func PrimaryId()int{
 	id++
 	return id
 }
 
-func (tasks *Tasks) add(title string){
+func add(title string){
+	tasks:= Load()
 	task := Task{
 		Title: title,
 		Id: PrimaryId(),
-		Completed: false,
+		Status: "todo",
 		CreateAT: time.Now(),
-		ComplateAT: nil,
+		CompleteAT: nil,
 	}
-	*tasks = append(*tasks, task)
-	//fmt.Println("Задача добавлена!")
+	tasks = append(tasks, task)
+	fmt.Println("Задача добавлена!")
+	Save(tasks)
 }
 
-func (tasks *Tasks) validateIndex(Id int) error{
-		if Id < 0 || Id >= len(*tasks){
+func validateIndex(Id int) error{
+	tasks := Load()
+		if Id < 0 || Id >= len(tasks){
 		err := errors.New("Invalid Index")
 		fmt.Println(err)
 		return err
@@ -51,51 +60,70 @@ func (tasks *Tasks) validateIndex(Id int) error{
 	return nil
 }
 
-func (tasks *Tasks) TaskComplate(Id int)error{
-	t:= *tasks
-	now := time.Now()
-	if err:=t.validateIndex(Id); err!=nil{
+
+func MarkInProgress(Id int)error{
+	t:= Load()
+	//now := time.Now()
+	if err:=validateIndex(Id); err!=nil{
 		return err
 	}
-	for i:=0; i<len(t); i++{
+		for i:=0; i<len(t); i++{
 		if i==Id{
-			t[i].Completed = true
-			t[i].ComplateAT = &now
+			t[i].Status = "in-progress" 
+			//t[i].UpdateAT = &now
 		}
 	}
-	//fmt.Println("Задача выполнена!!")
+	
+	fmt.Println("Задача в процессе выполнения!!")
 	return nil
 }
 
-func (tasks *Tasks) delete (Id int) error{
-	t := *tasks
-	if err:= t.validateIndex(Id); err!= nil{
+func MarkDone(Id int)error{
+	t:= Load()
+	now := time.Now()
+	if err:=validateIndex(Id); err!=nil{
+		return err
+	}
+		for i:=0; i<len(t); i++{
+		if i==Id{
+			t[i].Status = "done" 
+			t[i].CompleteAT = &now
+		}
+	}
+	
+	fmt.Println("Задача в процессе выполнения!!")
+	return nil
+}
+
+func delete (Id int) error{
+	t :=  Load()
+	if err:= validateIndex(Id); err!= nil{
 		return err
 	}
 	//todos[index] = todos[len(todos)-1]
 		//todos = todos[:len(todos)-1]
-		*tasks = append(t[:Id], t[Id+1:]...)
-		//fmt.Println("Задача удалена!")
+		t = append(t[:Id], t[Id+1:]...)
+		fmt.Println("Задача удалена!")
 		return  nil
 }
 
-func (tasks *Tasks) UpdateTask(Id int, title string){
-	t := *tasks
+func UpdateTask(Id int, title string){
+	t := Load()
 	for i:=0; i< len(t); i++{
 		if i==Id{
 			t[Id].Title = title
 		}
 
 	}
-	//fmt.Println("Задача обнавлена")
+	fmt.Printf("Задача №%d обнавлена\n", Id)
 
 }
 
-func (tasks *Tasks) TaskList(){
-	fmt.Printf("%+v\n\n", tasks)
+func TaskList(){
+	print()
 }
 
-func (tasks *Tasks) CompletedTaskList(){
+/*func (tasks *Tasks) CompletedTaskList(){
 	t:= *tasks
 	var CompletedTask []Task
 	for i:=0; i<len(t); i++{
@@ -120,19 +148,26 @@ func (tasks *Tasks) NotCompletedTaskList(){
 		fmt.Printf("%+v\n\n", CompletedTask)
 
 }
+	*/
 
 
-func (tasks *Tasks) Print(){
+func Print(){
+	t:= Load()
 	table:= table.New(os.Stdout)
 	table.AddHeaders("#", "Title", "Status", "Create AT", "Complete AT")
 	table.SetRowLines(false)
-	for id, t:= range *tasks{
-		completed:= "✖️"
+	for id, t:= range t{
+		completed:= "todo"
 		completedAT := ""
-		if t.Completed{
-			completed = "✓"
-			completedAT = t.ComplateAT.Format(time.RFC1123)
+		if t.Status=="in-progress"{
+			completed = "In progress"
+			completedAT = t.CompleteAT.Format(time.RFC1123)
 		}
+		if t.Status=="done"{
+			completed = "Done"
+			completedAT = t.CompleteAT.Format(time.RFC1123)
+		}
+		
 
 		table.AddRow(strconv.Itoa(id), t.Title, completed, t.CreateAT.Format(time.RFC1123), completedAT)
 	}
