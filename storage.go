@@ -8,17 +8,19 @@ import (
 
 type Storage struct {
 	Tasks []Task `json:"tasks"`
+
 }
 
 const fileName = "tasks.json"
 
-func Save(tasks []Task){
+func Save(tasks []Task)error{
 	data, err:= json.MarshalIndent(tasks,"", "    ")
 	if err!=nil{
 		fmt.Println( "Ошибка сериализации: ", err)
-		return
+		return err
 	}
 	os.WriteFile(fileName, data, 0466)
+	return nil
 }
 
 func Load() []Task {

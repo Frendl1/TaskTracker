@@ -15,13 +15,10 @@ type Task struct{
 	Title string `json:"title"`
 	Status string `json:"status"` //todo, in-progress, done 
 	CreateAT time.Time `json:"createdAT"`
-//	UpdateAT time.Time `json:"updateAT"`
+	UpdateAT time.Time `json:"updateAT"`
 	CompleteAT *time.Time `json:"completeAT"`
 }
 
-
-var id int = 0
-type storage Storage
 /*
 func AddTask(desc string)                {}
 func UpdateTask(id int, desc string)     {}
@@ -31,23 +28,35 @@ func ListTasks()                         {}
 func ListTasksByStatus(status string)    {}
 */
 
-func PrimaryId()int{
-	id++
-	return id
+func PrimaryId(tasks []Task)int{
+	maxID:=0
+	for _, t := range tasks{
+		if t.Id>maxID{
+			maxID = t.Id
+		}
+	}
+	fmt.Println("MaxID:", maxID)
+	return maxID+1
 }
 
 func add(title string){
 	tasks:= Load()
+	newID:=PrimaryId(tasks)
 	task := Task{
 		Title: title,
-		Id: PrimaryId(),
+		Id: newID,
 		Status: "todo",
 		CreateAT: time.Now(),
 		CompleteAT: nil,
 	}
 	tasks = append(tasks, task)
+	fmt.Println("MaxID:", newID)
 	fmt.Println("Задача добавлена!")
-	Save(tasks)
+	err:= Save(tasks)
+	if err!= nil{
+		fmt.Println("Ошибка сохранения:", err)
+		return
+	}
 }
 
 func validateIndex(Id int) error{
@@ -63,18 +72,19 @@ func validateIndex(Id int) error{
 
 func MarkInProgress(Id int)error{
 	t:= Load()
-	//now := time.Now()
+	now := time.Now()
 	if err:=validateIndex(Id); err!=nil{
 		return err
 	}
-		for i:=0; i<len(t); i++{
+		for i:=range t{
 		if i==Id{
 			t[i].Status = "in-progress" 
-			//t[i].UpdateAT = &now
+			t[i].UpdateAT = now
 		}
 	}
 	
 	fmt.Println("Задача в процессе выполнения!!")
+	Save(t)
 	return nil
 }
 
@@ -91,37 +101,40 @@ func MarkDone(Id int)error{
 		}
 	}
 	
-	fmt.Println("Задача в процессе выполнения!!")
+	fmt.Println("Вы выполнили задачу!!")
+	Save(t)
 	return nil
 }
 
-func delete (Id int) error{
+func delete (id int) error{
 	t :=  Load()
-	if err:= validateIndex(Id); err!= nil{
+	if err:= validateIndex(id); err!= nil{
 		return err
 	}
 	//todos[index] = todos[len(todos)-1]
 		//todos = todos[:len(todos)-1]
-		t = append(t[:Id], t[Id+1:]...)
+		t = append(t[:id], t[id+1:]...)
+		Save(t)
 		fmt.Println("Задача удалена!")
 		return  nil
 }
 
-func UpdateTask(Id int, title string){
+func UpdateTask(id int, title string){
 	t := Load()
-	for i:=0; i< len(t); i++{
-		if i==Id{
-			t[Id].Title = title
+	for i:= range t{
+		 //fmt.Println("Цикл начался")
+		if i==id{
+			//fmt.Println("Айди найдено")
+			t[id].Title = title
+			t[id].UpdateAT = time.Now()
 		}
 
 	}
-	fmt.Printf("Задача №%d обнавлена\n", Id)
+	fmt.Printf("Задача №%d обнавлена\n", id)
+	Save(t)
 
 }
 
-func TaskList(){
-	print()
-}
 
 /*func (tasks *Tasks) CompletedTaskList(){
 	t:= *tasks
@@ -151,25 +164,24 @@ func (tasks *Tasks) NotCompletedTaskList(){
 	*/
 
 
-func Print(){
-	t:= Load()
+func PrintAll(){
+	tasks:= Load()
 	table:= table.New(os.Stdout)
-	table.AddHeaders("#", "Title", "Status", "Create AT", "Complete AT")
+	table.AddHeaders("#", "Title", "Status", "Create AT", "UpdateAT", "Complete AT")
 	table.SetRowLines(false)
-	for id, t:= range t{
+	for id, task:= range tasks{
 		completed:= "todo"
 		completedAT := ""
-		if t.Status=="in-progress"{
+		if task.Status=="in-progress"{
 			completed = "In progress"
-			completedAT = t.CompleteAT.Format(time.RFC1123)
 		}
-		if t.Status=="done"{
+		if task.Status=="done"{
 			completed = "Done"
-			completedAT = t.CompleteAT.Format(time.RFC1123)
+			completedAT = task.CompleteAT.Format(time.RFC1123)
 		}
 		
 
-		table.AddRow(strconv.Itoa(id), t.Title, completed, t.CreateAT.Format(time.RFC1123), completedAT)
+		table.AddRow(strconv.Itoa(id), task.Title, completed, task.CreateAT.Format(time.RFC1123),task.UpdateAT.Format(time.RFC1123), completedAT)
 	}
 	table.Render()
 }

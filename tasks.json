@@ -1,37 +1,26 @@
 [
     {
         "id": 1,
-        "title": "Бросить ПИть",
-        "status": "",
-        "createdAT": "0001-01-01T00:00:00Z",
-        "completeAT": null
+        "title": "Обновляем задачу",
+        "status": "done",
+        "createdAT": "2025-09-24T07:13:15.826453423+03:00",
+        "updateAT": "2025-09-24T08:23:18.254245822+03:00",
+        "completeAT": "2025-09-24T08:25:17.273277841+03:00"
+    },
+    {
+        "id": 1,
+        "title": "I love u)",
+        "status": "done",
+        "createdAT": "2025-09-24T07:13:16.417252156+03:00",
+        "updateAT": "0001-01-01T00:00:00Z",
+        "completeAT": "2025-09-24T08:16:04.534795167+03:00"
     },
     {
         "id": 2,
-        "title": "НЕ забросить тасктрекер",
-        "status": "",
-        "createdAT": "0001-01-01T00:00:00Z",
-        "completeAT": null
-    },
-    {
-        "id": 3,
-        "title": "ПОпасть в авитоТЕх",
-        "status": "",
-        "createdAT": "0001-01-01T00:00:00Z",
-        "completeAT": null
-    },
-    {
-        "id": 1,
-        "title": "Debugging",
-        "status": "todo",
-        "createdAT": "2025-09-23T11:35:42.19214532+03:00",
-        "completeAT": null
-    },
-    {
-        "id": 1,
-        "title": "New update my ClI",
-        "status": "todo",
-        "createdAT": "2025-09-23T11:37:05.537159353+03:00",
+        "title": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "status": "in-progress",
+        "createdAT": "2025-09-24T07:33:50.223008735+03:00",
+        "updateAT": "0001-01-01T00:00:00Z",
         "completeAT": null
     }
 ]
