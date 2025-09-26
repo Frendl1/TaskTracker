@@ -1,67 +1,65 @@
-Task Tracker CLI
+ 📝 Task Tracker CLI
 
-A simple command-line interface (CLI) application for tracking tasks. This application allows users to create, update, and delete tasks, providing a straightforward way to manage personal or team tasks.
-Project Structure
+**Task Tracker CLI** — это простое приложение командной строки для управления задачами.  
+Оно позволяет создавать, обновлять, удалять и просматривать задачи, предоставляя удобный способ управлять личными или командными делами.
 
-task-tracker-cli
-├── cmd
-│   └── main.go          # Entry point of the application
-├── Logic
-│   ├── Struct
-│   │   └── task.go      # Task struct and methods
-│   └── storage
-│       └── storage.go   # Task storage interface and implementation
-├── go.mod                # Module dependencies
-├── go.sum                # Module dependency checksums
-└── README.md             # Project documentation
+---
 
-Installation
+## Структура проекта
 
-To install the project, clone the repository and navigate to the project directory:
+    task-tracker-cli
+    ├── cmd
+    │ └── main.go # Точка входа приложения
+    ├── internal
+    │ ├── task
+    │ │ └── task.go # Структура Task и методы
+    │ └── storage
+    │ └── storage.go # Интерфейс и реализация хранилища
+    ├── go.mod # Зависимости модуля
+    ├── go.sum # Контрольные суммы зависимостей
+    └── README.md # Документация проекта
 
-git clone <repository-url>
-cd task_tracker
+## Установка
 
-Then, run the following command to download the dependencies:
+Клонируйте репозиторий и перейдите в директорию проекта:
 
+```bash
+    git clone <repository-url>
+    cd task-tracker-cli
+```
+Затем загрузите зависимости 
+```
 go mod tidy
+```
 
-Usage
+ Использование
+ Запуск через go run:
 
-To run the application, use the following command:
+# Добавить задачу
+```go run cmd/main.go add "Task name"```
 
-    commands to run .go file
+# Список всех задач
+```go run cmd/main.go list```
 
-#to show all commands
-go run cmd/main.go 
-#to add task
-go run cmd/main.go add ["Task name"]
-#to list all tasks
-go run cmd/main.go list 
-#to update task by id
-go run cmd/main.go update [id] ["New task name"}
-#to delete task by id
-go run cmd/main.go delete [id]
+# Обновить задачу по id
+```go run cmd/main.go update [id] "New task name"```
+
+# Удалить задачу по id
+```go run cmd/main.go delete [id]```
 
 
-Features
+Возможности:
 
-    Create new tasks
-    Update existing tasks
-    Delete tasks
-    List all tasks
+✅ Создание новых задач
 
-json struct
+✏️ Обновление существующих задач
 
-id: A unique identifier for the task description: A short description of the task status: The status of the task (todo, in-progress, done) createdAt: The date and time when the task was created updatedAt: The date and time when the task was last updated Example: {"id":5,"title":"texttToUpdate","status":true,"createdAt":"2025-09-24T17:38:04.260268+03:00","updatedAt":"2025-09-25T10:01:51.6988301+03:00"}
+❌ Удаление задач
+
+📋 Просмотр списка всех задач
+
 Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
-License
-
-This project is licensed under the MIT License. See the LICENSE file for more details.
-About
-
-Task tracker is a project used to track and manage your tasks.
-
-
+Будем рады вашим доработкам!
+Открывайте issue или отправляйте pull request для исправлений и новых возможностей.
+ 
