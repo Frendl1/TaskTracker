@@ -35,6 +35,9 @@ go mod tidy
  Использование
  Запуск через go run:
 
+ # Показать все команды
+```go run cmd/main.go```
+
 # Добавить задачу
 ```go run cmd/main.go add "Task name"```
 
